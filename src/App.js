@@ -1,77 +1,67 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Select from './components/Select';
-import Card from './components/Card';
+import CardCountry from './components/CardCountry';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-class App extends Component {
-  constructor(){
-    super();
+const App = () => {
+  
+  const [country, setCountry] = useState('');
+  const [countries, setCountries] = useState([]);
+  const [allCountries, setAllCountries] = useState([]);
+  const [information, setInformation] = useState([]);
 
-  this.state = {
-    country: '',
-    countries: [],
-    all: [],
-    information : {},
-  }
- 
-  }
-
-  componentDidMount() {
+  //getAPI
+  const getAPI = () => {
     axios.get(`https://restcountries.eu/rest/v2/all`)
-      .then(res => {
-        const all = res.data;
-        this.setState({ all });
-        const countries = this.state.all.map(el => el.name)
-        this.setState({ countries });
-        // console.log(this.state)
-      })
+    .then(res => { setAllCountries(res.data); })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if(prevState.country !== this.state.country) {
-      const information = this.state.all.find(el => el.name === this.state.country)
-        this.setState({ information });
-    }
-}
+  // load datas - Mimic ComponentDidMount
+  useEffect(() => {
+      getAPI()
+        }, [])
 
-    handleSelectChange = (e) => {
-      e.preventDefault();
-      const value = e.target.value;
-      this.setState({
-        country: value
-       })
-       console.log(this.state)
-       
-    }
+  // create array countries - Minmic DidUpdate      
+  useEffect(() => {
+    setCountries(allCountries.map(el => el.name))
+         }, [allCountries]);
 
-        
-  render() {
-    console.log(this.state)
-    const { country, countries,information } = this.state;
+  //Change country
+  const handleSelectChange = (e) => {
+    setCountry(e.target.value);
+             }       
+    
+ // Find Information one country - Minmic DidUpdate
+  useEffect(() => {
+     setInformation (allCountries.filter(el => el.name === country))
+   }, [country]);
+
+console.log(information)
+
     return (
       <div> 
-        
         <h1>Please, select a country</h1>
         <Select 
        options = {countries} 
        value = {country}
-       handleChange = {this.handleSelectChange}
-       /> 
-       <Card 
-           name= {information.name}
-              flag = {information.flag}
-              timezones ={information.timezones}
-              region ={information.region}
-              subregion ={information.subregion}
-              population ={information.population}
-      />
+       handleChange = {handleSelectChange}
+       />  
+        {information.length>0 &&
+        <CardCountry 
+              name= {information[0].name}
+              flag = {information[0].flag}
+              capital ={information[0].capital}
+              timezones ={information[0].timezones}
+              region ={information[0].region}
+              subregion ={information[0].subregion}
+              population ={information[0].population}
+      /> 
+        }
        </div>
     
     )
-  }
-
 }
-
-
+  
 export default App;
 

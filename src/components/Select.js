@@ -1,7 +1,6 @@
 import React from 'react';
 
-const Select = ({value, handleChange, options}) => {
-    return(
+const Select = ({value, handleChange, options}) => (
         <div className="form-group">
             <label htmlFor='country'> Country </label>
             <select
@@ -10,17 +9,16 @@ const Select = ({value, handleChange, options}) => {
               onChange={handleChange}
               >
               <option value="" disabled>Select Country</option>
-              {options.map(option => {
-                return (
+              {options.map(option => (
                   <option
                     key={option}
                     value={option}
                     label={option}>{option}
                   </option>
-                );
-              })}
+                ))}         
             </select>
-      </div>)
-}
+      </div>
+)
+
 
 export default Select;
