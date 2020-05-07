@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 
 
-const CardCountry = ({name,flag,capital,timezones,region,subregion,population}) => (
+const CardCountry = ({name,flag,capital,borders,region,subregion,population}) => (
           <Container className="card-template">
           <Row>
           <Col sm={5} >
@@ -24,7 +24,8 @@ const CardCountry = ({name,flag,capital,timezones,region,subregion,population}) 
                       Population: {population}
                       </Card.Text>
                       <Card.Text>
-                          <ul>{timezones.map(tz => (
+                        Borders:
+                          <ul>{borders.map(tz => (
                         <li>{tz}</li>
                               ))}
                       </ul>     
